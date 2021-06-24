@@ -40,18 +40,18 @@ app.get("/user/:username", async (req, res) => {
     let users = JSON.parse(data);
     let {username} = req.params;
 
-    const user = users.find(user => user.username === username);
+     const user = users.find(user => user.username === username);
 
     res.render('user', {user});
 })
 
 app.post("/login", async (req, res) => {
-    let data = await fs.readFile(link, 'utf-8');
-    let users = JSON.parse(data);
+     let data = await fs.readFile(link, 'utf-8');
+     let users = JSON.parse(data);
 
     users.forEach(value => {
-        if (req.body.username === value.username && req.body.password === value.password) {
-            return res.redirect('/user/' + value.username);
+         if (req.body.username === value.username && req.body.password === value.password) {
+             return res.redirect('/user/' + value.username);
         }
     });
 
@@ -62,11 +62,11 @@ app.post("/registration", async (req, res) => {
     let data = await fs.readFile(link, 'utf-8');
     let users = JSON.parse(data);
 
-    let validation = users.find(value => value.username === req.body.username);
+      let validation = users.find(value => value.username === req.body.username);
 
-    if (validation) {
-         return res.json('A user with this name already exists, try another');
-    }
+          if (validation) {
+             return res.json('A user with this name already exists, try another');
+          }
 
     let body = req.body;
     users.push(body);
