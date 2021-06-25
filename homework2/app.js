@@ -13,9 +13,15 @@ app.set("view engine", ".hbs");
 app.engine('.hbs', expressHbs({
     defaultLayout: false
 }));
+
+function Link() {
+    const data = await fs.readFile(link, 'utf-8');
+    const users = JSON.parse(data);
+  } 
+
 app.set("views", path.join(__dirname, "static"));
 
-let link=path.join(__dirname, "usersBD.json");
+const link=path.join(__dirname, "usersBD.json");
 
 app.get('/', async (req, res) => {
     return res.render('main');
@@ -30,14 +36,12 @@ app.get('/registration', async (req, res) => {
 });
 
 app.get("/users", async (req, res) => {
-    let data = await fs.readFile(link, 'utf-8');
-    let users = JSON.parse(data);
+    Link();
     res.render('users', {users});
 });
 
 app.get("/user/:username", async (req, res) => {
-    let data = await fs.readFile(link, 'utf-8');
-    let users = JSON.parse(data);
+    Link();
     let {username} = req.params;
 
      const user = users.find(user => user.username === username);
@@ -46,9 +50,7 @@ app.get("/user/:username", async (req, res) => {
 })
 
 app.post("/login", async (req, res) => {
-     let data = await fs.readFile(link, 'utf-8');
-     let users = JSON.parse(data);
-
+     Link();
     users.forEach(value => {
          if (req.body.username === value.username && req.body.password === value.password) {
              return res.redirect('/user/' + value.username);
@@ -59,8 +61,7 @@ app.post("/login", async (req, res) => {
 })
 
 app.post("/registration", async (req, res) => {
-    let data = await fs.readFile(link, 'utf-8');
-    let users = JSON.parse(data);
+    Link();
 
       let validation = users.find(value => value.username === req.body.username);
 
@@ -68,9 +69,9 @@ app.post("/registration", async (req, res) => {
              return res.json('A user with this name already exists, try another');
           }
 
-    let body = req.body;
+    const body = req.body;
     users.push(body);
-    let updateUsers = JSON.stringify(users);
+    const updateUsers = JSON.stringify(users);
     await fs.writeFile(link, updateUsers);
 
         return res.redirect("/user/"+req.body.username);
